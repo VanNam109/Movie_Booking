@@ -9,9 +9,12 @@ html, body {
 
 .movieBackground {
   background-image: url('../images/bgmovie.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
-  box-shadow: inset 0 0 0 1000px rgba(0,0,0,.8);
-  height: 100vh;
+  box-shadow: inset 0 0 0 5000px rgba(0,0,0,.8);
+  height: 100%;
+  
 }
 
 .bookingMovie__heading--large{

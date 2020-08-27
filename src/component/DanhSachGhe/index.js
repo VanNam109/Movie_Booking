@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import * as movieAction from "../../redux/Actions/MovieAction";
 class DanhSachGhe extends Component {
   render() {
-    const { danhSachGhe } = this.props;
+    const { danhSachGhe, chonGhe } = this.props;
     console.log(danhSachGhe);
     return (
       <div>
@@ -14,20 +14,29 @@ class DanhSachGhe extends Component {
         <div className="screen"></div>
         <div>Màn hình</div>
         <div className="d-flex align-items-center text-center flex-column">
-          {danhSachGhe.map((danhSachGhe, index) => {
-            let hangGheDau = index == 0 ? "hangGheDau" : "ghe";
+          {danhSachGhe?.map((danhSachGhe, index) => {
+            let gheHangDau = index == 0 ? "hangGheDau" : "ghe";
             return (
               <div key={index} className="d-flex align-items-center flex-row">
-                <div className="hangGheDau">{danhSachGhe.hang}</div>
-                <div className="d-flex flex-row ">
-                  {danhSachGhe.danhSachGhe.map((danhSachGhe, index) => {
-                    return (
+                <div className="firstChar">{danhSachGhe.hang}</div>
+                <div className="d-flex flex-row  ">
+                  {danhSachGhe?.danhSachGhe.map((ghe, i) => {
+                    let gheDat = ghe.daDat;
+                    let indexGhe = chonGhe.findIndex(
+                      (gheDangDat) => gheDangDat.soGhe === ghe.soGhe
+                    );
+                    let classGheDangDat = indexGhe !== -1 ? "gheDangChon" : "";
+                    return gheDat ? (
+                      <div key={i} className={`${gheHangDau} gheDuocChon`}>
+                        {ghe.soGhe}
+                      </div>
+                    ) : (
                       <div
-                        key={index}
-                        className={hangGheDau}
-                        onClick={() => console.log("gheDat")}
+                        key={i}
+                        className={`${gheHangDau} ${classGheDangDat}`}
+                        onClick={() => this.props.chonGheNgoi(ghe)}
                       >
-                        {danhSachGhe.soGhe}
+                        {ghe.soGhe}
                       </div>
                     );
                   })}
@@ -43,6 +52,14 @@ class DanhSachGhe extends Component {
 const mapStateToProps = (state) => {
   return {
     danhSachGhe: state.MovieReducer.danhSachGhe,
+    chonGhe: state.MovieReducer.chonGhe,
   };
 };
-export default connect(mapStateToProps, null)(DanhSachGhe);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    chonGheNgoi: (ghe) => {
+      dispatch(movieAction.chonGhe(ghe));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DanhSachGhe);
